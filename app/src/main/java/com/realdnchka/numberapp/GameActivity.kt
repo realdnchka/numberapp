@@ -1,6 +1,5 @@
 package com.realdnchka.numberapp
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -21,33 +20,8 @@ class GameActivity : AppCompatActivity() {
         val randomNumber: Int = getRandom()
         var sumOfClick = 0
 
-        btnOne.setOnClickListener() {
-            sumOfClick += countNumber(btnOne)
-        }
-
-        btnTwo.setOnClickListener() {
-            sumOfClick += countNumber(btnTwo)
-        }
-
-        btnThree.setOnClickListener() {
-            sumOfClick += countNumber(btnThree)
-        }
-
-        btnFour.setOnClickListener() {
-            sumOfClick += countNumber(btnFour)
-        }
-
-        btnFive.setOnClickListener() {
-            sumOfClick += countNumber(btnFive)
-        }
-
         tvNumber.text = "Number: ${randomNumber}"
         setNumbers(btnOne, btnTwo, btnThree, btnFour, btnFive, getNumbers(randomNumber))
-
-        if (sumOfClick > randomNumber) {
-            val intent = Intent(this, GameActivity::class.java)
-            startActivity(intent)
-        }
     }
 
     private fun countNumber(btn: Button): Int {
