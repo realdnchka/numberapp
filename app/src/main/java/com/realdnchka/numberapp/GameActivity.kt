@@ -1,6 +1,7 @@
 package com.realdnchka.numberapp
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+        window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         supportActionBar?.hide()
 
         val btnOne: Button = findViewById(R.id.btn_one)
@@ -18,14 +20,9 @@ class GameActivity : AppCompatActivity() {
         val btnFive: Button = findViewById(R.id.btn_five)
         val tvNumber: TextView = findViewById(R.id.tv_number)
         val randomNumber: Int = getRandom()
-        var sumOfClick = 0
 
         tvNumber.text = "Number: ${randomNumber}"
         setNumbers(btnOne, btnTwo, btnThree, btnFour, btnFive, getNumbers(randomNumber))
-    }
-
-    private fun countNumber(btn: Button): Int {
-        return btn.text.toString().toInt()
     }
 
     private fun setNumbers(btnOne: Button, btnTwo: Button, btnThree: Button, btnFour: Button, btnFive: Button, arrayOfNumbers: List<Int>) {
