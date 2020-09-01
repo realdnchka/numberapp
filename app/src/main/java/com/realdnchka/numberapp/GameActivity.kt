@@ -10,7 +10,6 @@ class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
-        window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         supportActionBar?.hide()
 
         val btnOne: Button = findViewById(R.id.btn_one)
@@ -20,9 +19,28 @@ class GameActivity : AppCompatActivity() {
         val btnFive: Button = findViewById(R.id.btn_five)
         val tvNumber: TextView = findViewById(R.id.tv_number)
         val randomNumber: Int = getRandom()
+        var count = 0
 
         tvNumber.text = "Number: ${randomNumber}"
         setNumbers(btnOne, btnTwo, btnThree, btnFour, btnFive, getNumbers(randomNumber))
+
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        val decorView = window.decorView
+        if (hasFocus) {
+            decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+        }
+    }
+
+    private fun countSum(btn: Button): Int {
+        return btn.text.toString().toInt()
     }
 
     private fun setNumbers(btnOne: Button, btnTwo: Button, btnThree: Button, btnFour: Button, btnFive: Button, arrayOfNumbers: List<Int>) {

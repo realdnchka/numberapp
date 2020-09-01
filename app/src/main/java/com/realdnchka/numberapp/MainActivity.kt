@@ -11,13 +11,25 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         supportActionBar?.hide()
-        val btnStartGame: Button = findViewById(R.id.start_game)
-        val btnExit: Button = findViewById(R.id.exit)
+        val btnStartGame: Button = findViewById(R.id.btn_start_game)
+        val btnExit: Button = findViewById(R.id.btn_exit)
 
         btnStartGame.setOnClickListener(this::onBtnNewGameClick)
         btnExit.setOnClickListener(this::exitGame)
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        val decorView = window.decorView
+        if (hasFocus) {
+            decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+        }
     }
 
     private fun onBtnNewGameClick(view: View) {
