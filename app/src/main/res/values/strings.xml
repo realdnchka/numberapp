@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">numberapp</string>
-    <string name="exit">exit</string>
-    <string name="start_game">start game</string>
+    <string name="exit">EXIT</string>
+    <string name="start_game">START GAME</string>
+    <string name="leaderboard">LEADERBOARD</string>
+    <string name="settings">SETTINGS</string>
+    <string name="profile">PROFILE</string>
 </resources>

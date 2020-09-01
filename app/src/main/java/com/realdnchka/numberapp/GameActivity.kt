@@ -1,12 +1,10 @@
 package com.realdnchka.numberapp
 
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_game.*
 
 private var buttonOnePressed = false
 private var buttonTwoPressed = false
@@ -18,7 +16,6 @@ class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
-        window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         supportActionBar?.hide()
 
         val btnOne: Button = findViewById(R.id.btn_one)
