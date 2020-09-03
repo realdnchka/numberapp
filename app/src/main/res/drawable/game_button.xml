@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
-        <shape android:shape="rectangle">
-            <corners android:radius="10dp"/>
-            <size android:width="52dp"
-                android:height="52dp"/>
-            <solid android:color="@color/cream_white"/>
-        </shape>
-    </item>
-</layer-list>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:state_selected="true"
+        android:drawable="@drawable/game_button_pressed"/>
+    <item
+        android:state_selected="false"
+        android:drawable="@drawable/game_button_unpressed"/>
+</selector>
