@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 
-private var count = 0
+//private var count = 0
 class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,16 +20,20 @@ class GameActivity : AppCompatActivity() {
         val btnFive: Button = findViewById(R.id.btn_five)
         val tvNumber: TextView = findViewById(R.id.tv_number)
         val tvCurrentScore: TextView = findViewById(R.id.tv_current_score)
-
+        val countTV: TextView = findViewById(R.id.count_curr)
+        val stateTV: TextView = findViewById(R.id.state_curr)
         var currentScore: Int = 0
         var randomNumber: Int = getRandom()
         tvNumber.text = "Number: ${randomNumber}"
         setNumbers(btnOne, btnTwo, btnThree, btnFour, btnFive, getNumbers(randomNumber))
+        var count = 0
 
         btnOne.setOnClickListener() {
+            stateTV.text = btnOne.isSelected.toString()
             btnOne.isSelected = !btnOne.isSelected
             if (btnOne.isSelected) {
                 count += btnOne.text.toString().toInt()
+                countTV.text = count.toString()
                 if (count == randomNumber) {
                     count = 0
                     currentScore += (80..120).random()
@@ -45,13 +49,16 @@ class GameActivity : AppCompatActivity() {
                 }
             } else {
                 count -= btnOne.text.toString().toInt()
+                countTV.text = count.toString()
             }
         }
 
         btnTwo.setOnClickListener() {
+            stateTV.text = btnTwo.isSelected.toString()
             btnTwo.isSelected = !btnTwo.isSelected
             if (btnTwo.isSelected) {
                 count += btnTwo.text.toString().toInt()
+                countTV.text = count.toString()
                 if (count == randomNumber) {
                     count = 0
                     currentScore += (80..120).random()
@@ -67,13 +74,16 @@ class GameActivity : AppCompatActivity() {
                 }
             } else {
                 count -= btnTwo.text.toString().toInt()
+                countTV.text = count.toString()
             }
         }
 
         btnThree.setOnClickListener() {
+            stateTV.text = btnThree.isSelected.toString()
             btnThree.isSelected = !btnThree.isSelected
-            if (btnTwo.isSelected) {
+            if (btnThree.isSelected) {
                 count += btnThree.text.toString().toInt()
+                countTV.text = count.toString()
                 if (count == randomNumber) {
                     count = 0
                     currentScore += (80..120).random()
@@ -89,13 +99,16 @@ class GameActivity : AppCompatActivity() {
                 }
             } else {
                 count -= btnThree.text.toString().toInt()
+                countTV.text = count.toString()
             }
         }
 
         btnFour.setOnClickListener() {
+            stateTV.text = btnFour.isSelected.toString()
             btnFour.isSelected = !btnFour.isSelected
             if (btnFour.isSelected) {
                 count += btnFour.text.toString().toInt()
+                countTV.text = count.toString()
                 if (count == randomNumber) {
                     count = 0
                     currentScore += (80..120).random()
@@ -111,13 +124,16 @@ class GameActivity : AppCompatActivity() {
                 }
             } else {
                 count -= btnFour.text.toString().toInt()
+                countTV.text = count.toString()
             }
         }
 
         btnFive.setOnClickListener() {
+            stateTV.text = btnFive.isSelected.toString()
             btnFive.isSelected = !btnFive.isSelected
             if (btnFive.isSelected) {
-                count += btnTwo.text.toString().toInt()
+                count += btnFive.text.toString().toInt()
+                countTV.text = count.toString()
                 if (count == randomNumber) {
                     count = 0
                     currentScore += (80..120).random()
@@ -133,6 +149,7 @@ class GameActivity : AppCompatActivity() {
                 }
             } else {
                 count -= btnFive.text.toString().toInt()
+                countTV.text = count.toString()
             }
         }
     }
