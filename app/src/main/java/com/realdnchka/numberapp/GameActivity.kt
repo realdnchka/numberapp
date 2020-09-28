@@ -5,10 +5,6 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
-var buttonTwoPressed = false
-var buttonThreePressed = false
-var buttonFourPressed = false
-var buttonFivePressed = false
 
 private var count = 0
 class GameActivity : AppCompatActivity() {
@@ -27,7 +23,6 @@ class GameActivity : AppCompatActivity() {
 
         var currentScore: Int = 0
         var randomNumber: Int = getRandom()
-
         tvNumber.text = "Number: ${randomNumber}"
         setNumbers(btnOne, btnTwo, btnThree, btnFour, btnFive, getNumbers(randomNumber))
 
@@ -54,10 +49,9 @@ class GameActivity : AppCompatActivity() {
         }
 
         btnTwo.setOnClickListener() {
-            buttonTwoPressed = !buttonTwoPressed
-            if (buttonTwoPressed) {
+            btnTwo.isSelected = !btnTwo.isSelected
+            if (btnTwo.isSelected) {
                 count += btnTwo.text.toString().toInt()
-                btnTwo.setBackgroundColor(getColor(R.color.btn_pressed))
                 if (count == randomNumber) {
                     count = 0
                     currentScore += (80..120).random()
@@ -65,27 +59,21 @@ class GameActivity : AppCompatActivity() {
                     randomNumber = getRandom()
                     tvNumber.text = "Number: ${randomNumber}"
                     setNumbers(btnOne, btnTwo, btnThree, btnFour, btnFive, getNumbers(randomNumber))
-                    btnOne.setBackgroundColor(getColor(R.color.cream_white))
-                    btnTwo.setBackgroundColor(getColor(R.color.cream_white))
-                    btnThree.setBackgroundColor(getColor(R.color.cream_white))
-                    btnFour.setBackgroundColor(getColor(R.color.cream_white))
-                    btnFive.setBackgroundColor(getColor(R.color.cream_white))
-                    btnOne.isPressed = false
-                    btnTwo.isPressed = false
-                    btnThree.isPressed = false
-                    btnFour.isPressed = false
-                    btnFive.isPressed = false
+                    btnOne.isSelected = false
+                    btnTwo.isSelected = false
+                    btnThree.isSelected = false
+                    btnFour.isSelected = false
+                    btnFive.isSelected = false
                 }
             } else {
                 count -= btnTwo.text.toString().toInt()
-                btnTwo.setBackgroundColor(getColor(R.color.cream_white))
             }
         }
+
         btnThree.setOnClickListener() {
-            buttonThreePressed = !buttonThreePressed
-            if (buttonThreePressed) {
+            btnThree.isSelected = !btnThree.isSelected
+            if (btnTwo.isSelected) {
                 count += btnThree.text.toString().toInt()
-                btnThree.setBackgroundColor(getColor(R.color.btn_pressed))
                 if (count == randomNumber) {
                     count = 0
                     currentScore += (80..120).random()
@@ -93,27 +81,21 @@ class GameActivity : AppCompatActivity() {
                     randomNumber = getRandom()
                     tvNumber.text = "Number: ${randomNumber}"
                     setNumbers(btnOne, btnTwo, btnThree, btnFour, btnFive, getNumbers(randomNumber))
-                    btnOne.setBackgroundColor(getColor(R.color.cream_white))
-                    btnTwo.setBackgroundColor(getColor(R.color.cream_white))
-                    btnThree.setBackgroundColor(getColor(R.color.cream_white))
-                    btnFour.setBackgroundColor(getColor(R.color.cream_white))
-                    btnFive.setBackgroundColor(getColor(R.color.cream_white))
-                    btnOne.isPressed = false
-                    btnTwo.isPressed = false
-                    btnThree.isPressed = false
-                    btnFour.isPressed = false
-                    btnFive.isPressed = false
+                    btnOne.isSelected = false
+                    btnTwo.isSelected = false
+                    btnThree.isSelected = false
+                    btnFour.isSelected = false
+                    btnFive.isSelected = false
                 }
             } else {
                 count -= btnThree.text.toString().toInt()
-                btnThree.setBackgroundColor(getColor(R.color.cream_white))
             }
         }
+
         btnFour.setOnClickListener() {
-            buttonFourPressed = !buttonFourPressed
-            if (buttonFourPressed) {
+            btnFour.isSelected = !btnFour.isSelected
+            if (btnFour.isSelected) {
                 count += btnFour.text.toString().toInt()
-                btnFour.setBackgroundColor(getColor(R.color.btn_pressed))
                 if (count == randomNumber) {
                     count = 0
                     currentScore += (80..120).random()
@@ -121,27 +103,21 @@ class GameActivity : AppCompatActivity() {
                     randomNumber = getRandom()
                     tvNumber.text = "Number: ${randomNumber}"
                     setNumbers(btnOne, btnTwo, btnThree, btnFour, btnFive, getNumbers(randomNumber))
-                    btnOne.setBackgroundColor(getColor(R.color.cream_white))
-                    btnTwo.setBackgroundColor(getColor(R.color.cream_white))
-                    btnThree.setBackgroundColor(getColor(R.color.cream_white))
-                    btnFour.setBackgroundColor(getColor(R.color.cream_white))
-                    btnFive.setBackgroundColor(getColor(R.color.cream_white))
-                    btnOne.isPressed = false
-                    btnTwo.isPressed = false
-                    btnThree.isPressed = false
-                    btnFour.isPressed = false
-                    btnFive.isPressed = false
+                    btnOne.isSelected = false
+                    btnTwo.isSelected = false
+                    btnThree.isSelected = false
+                    btnFour.isSelected = false
+                    btnFive.isSelected = false
                 }
             } else {
                 count -= btnFour.text.toString().toInt()
-                btnFour.setBackgroundColor(getColor(R.color.cream_white))
             }
         }
+
         btnFive.setOnClickListener() {
-            buttonFivePressed = !buttonFivePressed
-            if (buttonFivePressed) {
-                count += btnFive.text.toString().toInt()
-                btnFive.setBackgroundColor(getColor(R.color.btn_pressed))
+            btnFive.isSelected = !btnFive.isSelected
+            if (btnFive.isSelected) {
+                count += btnTwo.text.toString().toInt()
                 if (count == randomNumber) {
                     count = 0
                     currentScore += (80..120).random()
@@ -149,20 +125,14 @@ class GameActivity : AppCompatActivity() {
                     randomNumber = getRandom()
                     tvNumber.text = "Number: ${randomNumber}"
                     setNumbers(btnOne, btnTwo, btnThree, btnFour, btnFive, getNumbers(randomNumber))
-                    btnOne.setBackgroundColor(getColor(R.color.cream_white))
-                    btnTwo.setBackgroundColor(getColor(R.color.cream_white))
-                    btnThree.setBackgroundColor(getColor(R.color.cream_white))
-                    btnFour.setBackgroundColor(getColor(R.color.cream_white))
-                    btnFive.setBackgroundColor(getColor(R.color.cream_white))
-                    btnOne.isPressed = false
-                    btnTwo.isPressed = false
-                    btnThree.isPressed = false
-                    btnFour.isPressed = false
-                    btnFive.isPressed = false
+                    btnOne.isSelected = false
+                    btnTwo.isSelected = false
+                    btnThree.isSelected = false
+                    btnFour.isSelected = false
+                    btnFive.isSelected = false
                 }
             } else {
                 count -= btnFive.text.toString().toInt()
-                btnFive.setBackgroundColor(getColor(R.color.cream_white))
             }
         }
     }
