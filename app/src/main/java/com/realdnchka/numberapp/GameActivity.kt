@@ -169,24 +169,18 @@ class GameActivity : AppCompatActivity() {
     private fun getNumbers(sum: Int): List<Int> {
 
         val countOfNumbers = (2..5).random()
-        val arr = IntArray(5) {0}
+        val arr = IntArray(5) { 0 }
         for (i in 0 until countOfNumbers - 1) {
-            if (sum - arr.sum() > 0) {
+            if (sum - arr.sum() > 1) {
                 val randNumber = (1 until sum - arr.sum()).random()
                 arr[i] = randNumber
             }
         }
         arr[countOfNumbers - 1] = sum - arr.sum() + arr[countOfNumbers - 1]
         for (i in arr.indices) {
-            if (i > countOfNumbers - 2) {
-                while (arr[i] == 0) {
-                    val rand = (1 until sum).random()
-                    var switchNOD: Boolean = true
-                    var switchSUM: Boolean = true
-                    if (!arr.contains(rand) && switchNOD && switchSUM) {
-                        arr[i] = rand
-                    }
-                }
+            while (arr[i] == 0) {
+                val rand = (1 until sum).random()
+                arr[i] = rand
             }
         }
         return arr.toList().shuffled()
