@@ -1,6 +1,7 @@
 package com.realdnchka.numberapp
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +23,7 @@ class GameActivity : AppCompatActivity() {
         val tvCurrentScore: TextView = findViewById(R.id.tv_current_score)
         val countTV: TextView = findViewById(R.id.count_curr)
         val stateTV: TextView = findViewById(R.id.state_curr)
+        val tvTimer: TextView = findViewById(R.id.tv_timer)
         var currentScore: Int = 0
         var randomNumber: Int = getRandom()
         tvNumber.text = "Number: ${randomNumber}"
@@ -152,7 +154,17 @@ class GameActivity : AppCompatActivity() {
                 countTV.text = count.toString()
             }
         }
+        NewCountDownTimer(tvTimer).start()
     }
+        class NewCountDownTimer(private val tv: TextView) : CountDownTimer(60000, 1000) {
+            override fun onTick(p0: Long) {
+                tv.text = "00:${p0/1000}"
+            }
+
+            override fun onFinish() {
+                tv.text = "Time over!"
+            }
+        }
 
     private fun setNumbers(btnOne: Button, btnTwo: Button, btnThree: Button, btnFour: Button, btnFive: Button, arrayOfNumbers: List<Int>) {
         btnOne.text = arrayOfNumbers[0].toString()
