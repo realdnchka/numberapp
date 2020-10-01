@@ -3,18 +3,24 @@ package com.realdnchka.numberapp
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
+//class GameButton(context: Context): androidx.appcompat.widget.AppCompatButton(context) {
+//    var number: Int = 0
+//    fun changeNumber() {
+//        this.text = number.toString()
+//    }
+//}
 
-//private var count = 0
 class GameActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
         supportActionBar?.hide()
-
         val btnOne: Button = findViewById(R.id.btn_one)
         val btnTwo: Button = findViewById(R.id.btn_two)
         val btnThree: Button = findViewById(R.id.btn_three)
@@ -27,9 +33,9 @@ class GameActivity : AppCompatActivity() {
         val tvTimer: TextView = findViewById(R.id.tv_timer)
         var currentScore: Int = 0
         var randomNumber: Int = getRandom()
+        var count = 0
         tvNumber.text = "Number: ${randomNumber}"
         setNumbers(btnOne, btnTwo, btnThree, btnFour, btnFive, getNumbers(randomNumber))
-        var count = 0
 
         btnOne.setOnClickListener() {
             stateTV.text = btnOne.isSelected.toString()
@@ -156,7 +162,39 @@ class GameActivity : AppCompatActivity() {
             }
         }
         NewCountDownTimer(tvTimer).start()
+//        btnFive.setOnClickListener(this::gameBtnOnClick)
+//        btnFive.setOnClickListener() {
+//            changeNumber(btnFive)
+//        }
     }
+
+    private fun gameBtnOnClick(btn: View) {
+        btn.isSelected = !btn.isSelected
+    }
+
+//    private fun changeNumber(btn: Button) {
+//        if (btn.isSelected) {
+//            count += btn.number
+//            countTV.text = count.toString()
+//            if (count == randomNumber) {
+//                count = 0
+//                currentScore += (80..120).random()
+//                tvCurrentScore.text = "Current score: ${currentScore}"
+//                randomNumber = getRandom()
+//                tvNumber.text = "Number: ${randomNumber}"
+//                setNumbers(btnOne, btnTwo, btnThree, btnFour, btnFive, getNumbers(randomNumber))
+//                btnOne.isSelected = false
+//                btnTwo.isSelected = false
+//                btnThree.isSelected = false
+//                btnFive.isSelected = false
+//                btnFour.isSelected = false
+//            }
+//        } else {
+//            count -= btn.text.toString().toInt()
+//            countTV.text = count.toString()
+//        }
+//
+//    }
 
     class NewCountDownTimer(private val tv: TextView) : CountDownTimer(60000, 1000) {
         override fun onTick(p0: Long) {
@@ -211,4 +249,5 @@ class GameActivity : AppCompatActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
+
 }
