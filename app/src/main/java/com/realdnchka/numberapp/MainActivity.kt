@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
         val btnStartGame: Button = findViewById(R.id.btn_start_game)
         val btnExit: Button = findViewById(R.id.btn_exit)
 
+        btnStartGame.isSelected = false
         btnStartGame.setOnClickListener(this::onBtnNewGameClick)
         btnExit.setOnClickListener(this::exitGame)
     }
@@ -33,12 +34,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onBtnNewGameClick(view: View) {
+        changeState(view)
+        view.isEnabled = false
         val intent = Intent(this, GameActivity::class.java)
         startActivity(intent)
     }
 
     private fun exitGame(view: View) {
+        changeState(view)
         exitProcess(0)
+    }
+
+    private fun changeState(view: View) {
+        view.isSelected = true
     }
 
 }

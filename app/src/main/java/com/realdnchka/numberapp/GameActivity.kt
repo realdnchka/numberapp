@@ -1,5 +1,6 @@
 package com.realdnchka.numberapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.widget.Button
@@ -156,17 +157,25 @@ class GameActivity : AppCompatActivity() {
         }
         NewCountDownTimer(tvTimer).start()
     }
-        class NewCountDownTimer(private val tv: TextView) : CountDownTimer(60000, 1000) {
-            override fun onTick(p0: Long) {
-                tv.text = "00:${p0/1000}"
-            }
 
-            override fun onFinish() {
-                tv.text = "Time over!"
-            }
+    class NewCountDownTimer(private val tv: TextView) : CountDownTimer(60000, 1000) {
+        override fun onTick(p0: Long) {
+            tv.text = "00:${p0 / 1000}"
         }
 
-    private fun setNumbers(btnOne: Button, btnTwo: Button, btnThree: Button, btnFour: Button, btnFive: Button, arrayOfNumbers: List<Int>) {
+        override fun onFinish() {
+            tv.text = "Time over!"
+        }
+    }
+
+    private fun setNumbers(
+        btnOne: Button,
+        btnTwo: Button,
+        btnThree: Button,
+        btnFour: Button,
+        btnFive: Button,
+        arrayOfNumbers: List<Int>
+    ) {
         btnOne.text = arrayOfNumbers[0].toString()
         btnTwo.text = arrayOfNumbers[1].toString()
         btnThree.text = arrayOfNumbers[2].toString()
@@ -196,5 +205,10 @@ class GameActivity : AppCompatActivity() {
             }
         }
         return arr.toList().shuffled()
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 }
