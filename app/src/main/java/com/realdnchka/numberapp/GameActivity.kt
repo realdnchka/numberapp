@@ -14,6 +14,7 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.github.furkankaplan.fkblurview.FKBlurView
+import com.realdnchka.numberapp.storage.AppPreferences
 import kotlinx.android.synthetic.main.activity_game.*
 
 class GameActivity : AppCompatActivity() {
@@ -60,6 +61,38 @@ class GameActivity : AppCompatActivity() {
                     0 // Y offset
                 )
 
+                val tvTotalScores: TextView = view.findViewById(R.id.tv_total_score)
+                val tvCongratsLabel: TextView = view.findViewById(R.id.tv_congrats_label)
+
+                val congratsWords: Array<String> = arrayOf("VERY GOOD", "IMPRESSIVE", "BRILLIANT")
+                tvTotalScores?.text = "+${currentScore}"
+
+                if (AppPreferences(this@GameActivity).getHighScore() >= currentScore) {
+                    tvCongratsLabel?.text = "${congratsWords.random()}!"
+                } else {
+                    tvCongratsLabel?.text = "NEW RECORD!"
+                    AppPreferences(this@GameActivity).saveHighScore(currentScore)
+                }
+
+                val btnMenu: Button = view.findViewById(R.id.popup_main_menu)
+                val btnAd: Button = view.findViewById(R.id.popup_watch_ad)
+                val btnStartGame: Button = view.findViewById(R.id.popup_start_game)
+
+                btnMenu.setOnClickListener() {
+                    btnMenu.isSelected = true
+                    onBackPressed()
+                }
+
+                btnAd.setOnClickListener() {
+                    btnAd.isSelected = true
+                }
+
+                btnStartGame.setOnClickListener() {
+                    btnStartGame.isSelected = true
+                    val intent = Intent(this@GameActivity, GameActivity::class.java)
+                    startActivity(intent)
+                }
+
                 fun disableButton(btn: Button) {
                     btn.isEnabled = false
                 }
@@ -71,7 +104,6 @@ class GameActivity : AppCompatActivity() {
                 disableButton(btnFive)
             }
         }
-
         timer.start()
 
         btnOne.setOnClickListener() {
@@ -114,6 +146,11 @@ class GameActivity : AppCompatActivity() {
             }
         } else {
             count -= btn.text.toString().toInt()
+            if (count == randomNumber) {
+                currentScore += (80..120).random()
+                randomNumber = getRandom()
+                gameStart(btnOne, btnTwo, btnThree, btnFour, btnFive)
+            }
         }
     }
 
