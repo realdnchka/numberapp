@@ -16,14 +16,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.github.furkankaplan.fkblurview.FKBlurView
 import kotlinx.android.synthetic.main.activity_game.*
 
-
-//class GameButton(context: Context): androidx.appcompat.widget.AppCompatButton(context) {
-//    var number: Int = 0
-//    fun changeNumber() {
-//        this.text = number.toString()
-//    }
-//}
-
 class GameActivity : AppCompatActivity() {
     private var randomNumber: Int = getRandom()
     private var count = 0
