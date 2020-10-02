@@ -1,12 +1,18 @@
 package com.realdnchka.numberapp
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.view.View
+import android.transition.TransitionManager
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_game.*
 
 //class GameButton(context: Context): androidx.appcompat.widget.AppCompatButton(context) {
 //    var number: Int = 0
@@ -16,7 +22,9 @@ import androidx.appcompat.app.AppCompatActivity
 //}
 
 class GameActivity : AppCompatActivity() {
-
+    private var randomNumber: Int = getRandom()
+    private var count = 0
+    private var currentScore: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
@@ -26,179 +34,116 @@ class GameActivity : AppCompatActivity() {
         val btnThree: Button = findViewById(R.id.btn_three)
         val btnFour: Button = findViewById(R.id.btn_four)
         val btnFive: Button = findViewById(R.id.btn_five)
-        val tvNumber: TextView = findViewById(R.id.tv_number)
-        val tvCurrentScore: TextView = findViewById(R.id.tv_current_score)
-        val countTV: TextView = findViewById(R.id.count_curr)
-        val stateTV: TextView = findViewById(R.id.state_curr)
         val tvTimer: TextView = findViewById(R.id.tv_timer)
-        var currentScore: Int = 0
-        var randomNumber: Int = getRandom()
-        var count = 0
-        tvNumber.text = "Number: ${randomNumber}"
-        setNumbers(btnOne, btnTwo, btnThree, btnFour, btnFive, getNumbers(randomNumber))
+
+
+        gameStart(btnOne, btnTwo, btnThree, btnFour, btnFive)
+
+        val timer = object : NewCountDownTimer(tvTimer) {
+            override fun onFinish() {
+                val inflater: LayoutInflater =
+                    getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+
+                // Inflate a custom view using layout inflater
+                val view = inflater.inflate(R.layout.time_over_popup, null)
+
+                // Initialize a new instance of popup window
+                val popupWindow = PopupWindow(
+                    view, // Custom view to show in popup window
+                    LinearLayout.LayoutParams.WRAP_CONTENT, // Width of popup window
+                    LinearLayout.LayoutParams.WRAP_CONTENT // Window height
+                )
+
+                TransitionManager.beginDelayedTransition(root_layout)
+                popupWindow.showAtLocation(
+                    root_layout, // Location to display popup window
+                    Gravity.CENTER, // Exact position of layout to display popup
+                    0, // X offset
+                    0 // Y offset
+                )
+
+                fun disableButton(btn: Button) {
+                    btn.isEnabled = false
+                }
+
+                disableButton(btnOne)
+                disableButton(btnTwo)
+                disableButton(btnThree)
+                disableButton(btnFour)
+                disableButton(btnFive)
+            }
+        }
+
+        timer.start()
 
         btnOne.setOnClickListener() {
-            stateTV.text = btnOne.isSelected.toString()
-            btnOne.isSelected = !btnOne.isSelected
-            if (btnOne.isSelected) {
-                count += btnOne.text.toString().toInt()
-                countTV.text = count.toString()
-                if (count == randomNumber) {
-                    count = 0
-                    currentScore += (80..120).random()
-                    tvCurrentScore.text = "Current score: ${currentScore}"
-                    randomNumber = getRandom()
-                    tvNumber.text = "Number: ${randomNumber}"
-                    setNumbers(btnOne, btnTwo, btnThree, btnFour, btnFive, getNumbers(randomNumber))
-                    btnOne.isSelected = false
-                    btnTwo.isSelected = false
-                    btnThree.isSelected = false
-                    btnFour.isSelected = false
-                    btnFive.isSelected = false
-                }
-            } else {
-                count -= btnOne.text.toString().toInt()
-                countTV.text = count.toString()
-            }
+            gameBtnOnClick(btnOne, btnOne, btnTwo, btnThree, btnFour, btnFive)
         }
 
         btnTwo.setOnClickListener() {
-            stateTV.text = btnTwo.isSelected.toString()
-            btnTwo.isSelected = !btnTwo.isSelected
-            if (btnTwo.isSelected) {
-                count += btnTwo.text.toString().toInt()
-                countTV.text = count.toString()
-                if (count == randomNumber) {
-                    count = 0
-                    currentScore += (80..120).random()
-                    tvCurrentScore.text = "Current score: ${currentScore}"
-                    randomNumber = getRandom()
-                    tvNumber.text = "Number: ${randomNumber}"
-                    setNumbers(btnOne, btnTwo, btnThree, btnFour, btnFive, getNumbers(randomNumber))
-                    btnOne.isSelected = false
-                    btnTwo.isSelected = false
-                    btnThree.isSelected = false
-                    btnFour.isSelected = false
-                    btnFive.isSelected = false
-                }
-            } else {
-                count -= btnTwo.text.toString().toInt()
-                countTV.text = count.toString()
-            }
+            gameBtnOnClick(btnTwo, btnOne, btnTwo, btnThree, btnFour, btnFive)
         }
 
         btnThree.setOnClickListener() {
-            stateTV.text = btnThree.isSelected.toString()
-            btnThree.isSelected = !btnThree.isSelected
-            if (btnThree.isSelected) {
-                count += btnThree.text.toString().toInt()
-                countTV.text = count.toString()
-                if (count == randomNumber) {
-                    count = 0
-                    currentScore += (80..120).random()
-                    tvCurrentScore.text = "Current score: ${currentScore}"
-                    randomNumber = getRandom()
-                    tvNumber.text = "Number: ${randomNumber}"
-                    setNumbers(btnOne, btnTwo, btnThree, btnFour, btnFive, getNumbers(randomNumber))
-                    btnOne.isSelected = false
-                    btnTwo.isSelected = false
-                    btnThree.isSelected = false
-                    btnFour.isSelected = false
-                    btnFive.isSelected = false
-                }
-            } else {
-                count -= btnThree.text.toString().toInt()
-                countTV.text = count.toString()
-            }
+            gameBtnOnClick(btnThree, btnOne, btnTwo, btnThree, btnFour, btnFive)
         }
 
         btnFour.setOnClickListener() {
-            stateTV.text = btnFour.isSelected.toString()
-            btnFour.isSelected = !btnFour.isSelected
-            if (btnFour.isSelected) {
-                count += btnFour.text.toString().toInt()
-                countTV.text = count.toString()
-                if (count == randomNumber) {
-                    count = 0
-                    currentScore += (80..120).random()
-                    tvCurrentScore.text = "Current score: ${currentScore}"
-                    randomNumber = getRandom()
-                    tvNumber.text = "Number: ${randomNumber}"
-                    setNumbers(btnOne, btnTwo, btnThree, btnFour, btnFive, getNumbers(randomNumber))
-                    btnOne.isSelected = false
-                    btnTwo.isSelected = false
-                    btnThree.isSelected = false
-                    btnFour.isSelected = false
-                    btnFive.isSelected = false
-                }
-            } else {
-                count -= btnFour.text.toString().toInt()
-                countTV.text = count.toString()
-            }
+            gameBtnOnClick(btnFour, btnOne, btnTwo, btnThree, btnFour, btnFive)
         }
 
         btnFive.setOnClickListener() {
-            stateTV.text = btnFive.isSelected.toString()
-            btnFive.isSelected = !btnFive.isSelected
-            if (btnFive.isSelected) {
-                count += btnFive.text.toString().toInt()
-                countTV.text = count.toString()
-                if (count == randomNumber) {
-                    count = 0
-                    currentScore += (80..120).random()
-                    tvCurrentScore.text = "Current score: ${currentScore}"
-                    randomNumber = getRandom()
-                    tvNumber.text = "Number: ${randomNumber}"
-                    setNumbers(btnOne, btnTwo, btnThree, btnFour, btnFive, getNumbers(randomNumber))
-                    btnOne.isSelected = false
-                    btnTwo.isSelected = false
-                    btnThree.isSelected = false
-                    btnFour.isSelected = false
-                    btnFive.isSelected = false
-                }
-            } else {
-                count -= btnFive.text.toString().toInt()
-                countTV.text = count.toString()
-            }
+            gameBtnOnClick(btnFive, btnOne, btnTwo, btnThree, btnFour, btnFive)
         }
-        NewCountDownTimer(tvTimer).start()
-//        btnFive.setOnClickListener(this::gameBtnOnClick)
-//        btnFive.setOnClickListener() {
-//            changeNumber(btnFive)
-//        }
     }
 
-    private fun gameBtnOnClick(btn: View) {
+    private fun gameBtnOnClick(
+        btn: Button,
+        btnOne: Button,
+        btnTwo: Button,
+        btnThree: Button,
+        btnFour: Button,
+        btnFive: Button
+    ) {
         btn.isSelected = !btn.isSelected
+        findViewById<TextView>(R.id.tv_number).text = "Number: ${randomNumber}"
+        if (btn.isSelected) {
+            count += btn.text.toString().toInt()
+            if (count == randomNumber) {
+                currentScore += (80..120).random()
+                randomNumber = getRandom()
+                gameStart(btnOne, btnTwo, btnThree, btnFour, btnFive)
+            }
+        } else {
+            count -= btn.text.toString().toInt()
+        }
     }
 
-//    private fun changeNumber(btn: Button) {
-//        if (btn.isSelected) {
-//            count += btn.number
-//            countTV.text = count.toString()
-//            if (count == randomNumber) {
-//                count = 0
-//                currentScore += (80..120).random()
-//                tvCurrentScore.text = "Current score: ${currentScore}"
-//                randomNumber = getRandom()
-//                tvNumber.text = "Number: ${randomNumber}"
-//                setNumbers(btnOne, btnTwo, btnThree, btnFour, btnFive, getNumbers(randomNumber))
-//                btnOne.isSelected = false
-//                btnTwo.isSelected = false
-//                btnThree.isSelected = false
-//                btnFive.isSelected = false
-//                btnFour.isSelected = false
-//            }
-//        } else {
-//            count -= btn.text.toString().toInt()
-//            countTV.text = count.toString()
-//        }
-//
-//    }
+    private fun gameStart(
+        btnOne: Button,
+        btnTwo: Button,
+        btnThree: Button,
+        btnFour: Button,
+        btnFive: Button
+    ) {
+        count = 0
+        findViewById<TextView>(R.id.tv_number).text = "Number: ${randomNumber}"
+        findViewById<TextView>(R.id.tv_current_score).text = "Current score: ${currentScore}"
+        setNumbers(btnOne, btnTwo, btnThree, btnFour, btnFive, getNumbers(randomNumber))
+        btnOne.isSelected = false
+        btnTwo.isSelected = false
+        btnThree.isSelected = false
+        btnFour.isSelected = false
+        btnFive.isSelected = false
+    }
 
-    class NewCountDownTimer(private val tv: TextView) : CountDownTimer(60000, 1000) {
+    open class NewCountDownTimer(private val tv: TextView) : CountDownTimer(2000, 1000) {
         override fun onTick(p0: Long) {
-            tv.text = "00:${p0 / 1000}"
+            if (p0 >= 10000) {
+                tv.text = "00:${p0 / 1000}"
+            } else {
+                tv.text = "00:0${p0 / 1000}"
+            }
         }
 
         override fun onFinish() {
@@ -249,5 +194,4 @@ class GameActivity : AppCompatActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
-
 }

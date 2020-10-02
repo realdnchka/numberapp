@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
         val btnStartGame: Button = findViewById(R.id.btn_start_game)
         val btnExit: Button = findViewById(R.id.btn_exit)
-
+        val btnOptions: Button = findViewById(R.id.btn_settings)
         btnStartGame.isSelected = false
         btnStartGame.setOnClickListener(this::onBtnNewGameClick)
         btnExit.setOnClickListener(this::exitGame)
@@ -35,18 +34,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun onBtnNewGameClick(view: View) {
         changeState(view)
-        view.isEnabled = false
         val intent = Intent(this, GameActivity::class.java)
         startActivity(intent)
     }
 
     private fun exitGame(view: View) {
         changeState(view)
-        exitProcess(0)
+        finishAffinity()
     }
 
     private fun changeState(view: View) {
         view.isSelected = true
     }
 
+    override fun onBackPressed() {
+        finishAffinity()
+    }
 }

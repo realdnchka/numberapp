@@ -5,4 +5,7 @@
     <string name="leaderboard">LEADERBOARD</string>
     <string name="settings">SETTINGS</string>
     <string name="profile">PROFILE</string>
+    <string name="watch_ad">WATCH AD</string>
+    <string name="time_over">Time over!</string>
+    <string name="main_menu">MAIN MENU</string>
 </resources>
