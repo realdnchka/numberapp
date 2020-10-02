@@ -43,24 +43,6 @@
             android:textColor="@color/cream_white"
             android:textSize="30sp" />
 
-        <TextView
-            android:id="@+id/count_curr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="asd"
-            android:textSize="30sp"
-            android:gravity="center"
-            android:textColor="@color/cream_white"/>
-
-        <TextView
-            android:id="@+id/state_curr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="asd"
-            android:textSize="30sp"
-            android:gravity="center"
-            android:textColor="@color/cream_white"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

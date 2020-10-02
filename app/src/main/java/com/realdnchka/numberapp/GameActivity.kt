@@ -7,6 +7,7 @@ import android.os.CountDownTimer
 import android.transition.TransitionManager
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.PopupWindow
@@ -142,7 +143,7 @@ class GameActivity : AppCompatActivity() {
         btnFive.isSelected = false
     }
 
-    open class NewCountDownTimer(private val tv: TextView) : CountDownTimer(2000, 1000) {
+    open class NewCountDownTimer(private val tv: TextView) : CountDownTimer(60000, 1000) {
         override fun onTick(p0: Long) {
             if (p0 >= 10000) {
                 tv.text = "00:${p0 / 1000}"
@@ -198,5 +199,18 @@ class GameActivity : AppCompatActivity() {
     override fun onBackPressed() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        val decorView = window.decorView
+        if (hasFocus) {
+            decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+        }
     }
 }
