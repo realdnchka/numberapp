@@ -1,35 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/popup_layout"
-    android:layout_width="240dp"
-    android:layout_height="160dp"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:background="@drawable/popup_bg">
+<com.github.furkankaplan.fkblurview.FKBlurView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:id="@+id/popup_layout">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/time_over"
-        android:textColor="@color/cream_white"/>
-    <Button
-        android:id="@+id/popup_start_game"
-        style="@style/MenuButton"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/menu_button"
-        android:text="@string/start_game" />
+    <LinearLayout
+        android:layout_width="240dp"
+        android:layout_height="160dp"
+        android:background="@drawable/popup_bg"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/popup_watch_ad"
-        style="@style/MenuButton"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/menu_button"
-        android:text="@string/watch_ad" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/time_over"
+            android:textColor="@color/cream_white" />
 
-    <Button
-        android:id="@+id/popup_main_menu"
-        style="@style/MenuButton"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/menu_button"
-        android:text="@string/main_menu" />
-</LinearLayout>
+        <Button
+            android:id="@+id/popup_start_game"
+            style="@style/MenuButton"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/menu_button"
+            android:text="@string/start_game" />
+
+        <Button
+            android:id="@+id/popup_watch_ad"
+            style="@style/MenuButton"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/menu_button"
+            android:text="@string/watch_ad" />
+
+        <Button
+            android:id="@+id/popup_main_menu"
+            style="@style/MenuButton"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/menu_button"
+            android:text="@string/main_menu" />
+    </LinearLayout>
+</com.github.furkankaplan.fkblurview.FKBlurView>

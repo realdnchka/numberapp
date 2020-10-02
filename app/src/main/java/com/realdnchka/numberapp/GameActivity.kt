@@ -12,7 +12,9 @@ import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.github.furkankaplan.fkblurview.FKBlurView
 import kotlinx.android.synthetic.main.activity_game.*
+
 
 //class GameButton(context: Context): androidx.appcompat.widget.AppCompatButton(context) {
 //    var number: Int = 0
@@ -36,7 +38,6 @@ class GameActivity : AppCompatActivity() {
         val btnFive: Button = findViewById(R.id.btn_five)
         val tvTimer: TextView = findViewById(R.id.tv_timer)
 
-
         gameStart(btnOne, btnTwo, btnThree, btnFour, btnFive)
 
         val timer = object : NewCountDownTimer(tvTimer) {
@@ -48,10 +49,14 @@ class GameActivity : AppCompatActivity() {
                 val view = inflater.inflate(R.layout.time_over_popup, null)
 
                 // Initialize a new instance of popup window
+
+                val popupBlurView: FKBlurView = view.findViewById(R.id.popup_layout)
+                popupBlurView.setBlurBackground(this@GameActivity, popupBlurView)
+
                 val popupWindow = PopupWindow(
                     view, // Custom view to show in popup window
-                    LinearLayout.LayoutParams.WRAP_CONTENT, // Width of popup window
-                    LinearLayout.LayoutParams.WRAP_CONTENT // Window height
+                    LinearLayout.LayoutParams.MATCH_PARENT, // Width of popup window
+                    LinearLayout.LayoutParams.MATCH_PARENT // Window height
                 )
 
                 TransitionManager.beginDelayedTransition(root_layout)
