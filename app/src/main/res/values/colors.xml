@@ -7,4 +7,5 @@
     <color name="cream_white">#F0F0F0</color>
     <color name="shadow">#26000000</color>
     <color name="btn_pressed">#383838</color>
+    <color name="scores">#FFD600</color>
 </resources>

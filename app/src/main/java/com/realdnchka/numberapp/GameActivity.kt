@@ -1,23 +1,47 @@
 package com.realdnchka.numberapp
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
+import android.animation.ValueAnimator.REVERSE
+import android.animation.ValueAnimator.INFINITE
 import android.content.Context
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.provider.MediaStore
 import android.transition.TransitionManager
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.PopupWindow
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.github.furkankaplan.fkblurview.FKBlurView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.reward.RewardedVideoAd
+import com.google.android.gms.ads.reward.RewardedVideoAdListener
+import com.google.android.gms.ads.rewarded.RewardItem
 import com.realdnchka.numberapp.storage.AppPreferences
 import kotlinx.android.synthetic.main.activity_game.*
+import kotlin.properties.Delegates
 
-class GameActivity : AppCompatActivity() {
+
+class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
+    private lateinit var mp: MediaPlayer
+    private lateinit var mpScores: MediaPlayer
+    private lateinit var mpEndGame: MediaPlayer
+    private lateinit var btnOne: Button
+    private lateinit var btnTwo: Button
+    private lateinit var btnThree: Button
+    private lateinit var btnFour: Button
+    private lateinit var btnFive: Button
+    private lateinit var tvTimer: TextView
+    private lateinit var btnBack: Button
+    private lateinit var mRewardedVideoAd: RewardedVideoAd
+    private lateinit var popupWindow: PopupWindow
+
+    private var rewardGet: Boolean = false
     private var randomNumber: Int = getRandom()
     private var count = 0
     private var currentScore: Int = 0
@@ -25,146 +49,267 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
         supportActionBar?.hide()
-        val btnOne: Button = findViewById(R.id.btn_one)
-        val btnTwo: Button = findViewById(R.id.btn_two)
-        val btnThree: Button = findViewById(R.id.btn_three)
-        val btnFour: Button = findViewById(R.id.btn_four)
-        val btnFive: Button = findViewById(R.id.btn_five)
-        val tvTimer: TextView = findViewById(R.id.tv_timer)
 
-        gameStart(btnOne, btnTwo, btnThree, btnFour, btnFive)
+        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this)
+        mRewardedVideoAd.rewardedVideoAdListener = this
+        loadRewardedVideoAd()
+        mp = MediaPlayer.create(this, R.raw.button_select)
+        mpScores = MediaPlayer.create(this, R.raw.get_scores)
+        mpEndGame = MediaPlayer.create(this, R.raw.end_game)
+        btnOne = findViewById(R.id.btn_one)
+        btnTwo = findViewById(R.id.btn_two)
+        btnThree = findViewById(R.id.btn_three)
+        btnFour = findViewById(R.id.btn_four)
+        btnFive = findViewById(R.id.btn_five)
+        tvTimer = findViewById(R.id.tv_timer)
+        btnBack = findViewById(R.id.btn_back)
 
-        val timer = object : NewCountDownTimer(tvTimer) {
-            override fun onFinish() {
-                val inflater: LayoutInflater =
-                    getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-
-                // Inflate a custom view using layout inflater
-                val view = inflater.inflate(R.layout.time_over_popup, null)
-
-                // Initialize a new instance of popup window
-
-                val popupBlurView: FKBlurView = view.findViewById(R.id.popup_layout)
-                popupBlurView.setBlurBackground(this@GameActivity, popupBlurView)
-
-                val popupWindow = PopupWindow(
-                    view, // Custom view to show in popup window
-                    LinearLayout.LayoutParams.MATCH_PARENT, // Width of popup window
-                    LinearLayout.LayoutParams.MATCH_PARENT // Window height
-                )
-
-                TransitionManager.beginDelayedTransition(root_layout)
-                popupWindow.showAtLocation(
-                    root_layout, // Location to display popup window
-                    Gravity.CENTER, // Exact position of layout to display popup
-                    0, // X offset
-                    0 // Y offset
-                )
-
-                val tvTotalScores: TextView = view.findViewById(R.id.tv_total_score)
-                val tvCongratsLabel: TextView = view.findViewById(R.id.tv_congrats_label)
-
-                val congratsWords: Array<String> = arrayOf("VERY GOOD", "IMPRESSIVE", "BRILLIANT")
-                tvTotalScores?.text = "+${currentScore}"
-
-                if (AppPreferences(this@GameActivity).getHighScore() >= currentScore) {
-                    tvCongratsLabel?.text = "${congratsWords.random()}!"
-                } else {
-                    tvCongratsLabel?.text = "NEW RECORD!"
-                    AppPreferences(this@GameActivity).saveHighScore(currentScore)
-                }
-
-                val btnMenu: Button = view.findViewById(R.id.popup_main_menu)
-                val btnAd: Button = view.findViewById(R.id.popup_watch_ad)
-                val btnStartGame: Button = view.findViewById(R.id.popup_start_game)
-
-                btnMenu.setOnClickListener() {
-                    btnMenu.isSelected = true
-                    onBackPressed()
-                }
-
-                btnAd.setOnClickListener() {
-                    btnAd.isSelected = true
-                }
-
-                btnStartGame.setOnClickListener() {
-                    btnStartGame.isSelected = true
-                    val intent = Intent(this@GameActivity, GameActivity::class.java)
-                    startActivity(intent)
-                }
-
-                fun disableButton(btn: Button) {
-                    btn.isEnabled = false
-                }
-
-                disableButton(btnOne)
-                disableButton(btnTwo)
-                disableButton(btnThree)
-                disableButton(btnFour)
-                disableButton(btnFive)
-            }
+        btnBack.setOnClickListener() {
+            btnBack.isSelected = true
+            soundOnClick()
+            onBackPressed()
         }
+
+        gameStart()
+
+        timerBonus.tv = tvTimer
+        timer.tv = tvTimer
         timer.start()
 
         btnOne.setOnClickListener() {
-            gameBtnOnClick(btnOne, btnOne, btnTwo, btnThree, btnFour, btnFive)
+            gameBtnOnClick(btnOne)
         }
 
         btnTwo.setOnClickListener() {
-            gameBtnOnClick(btnTwo, btnOne, btnTwo, btnThree, btnFour, btnFive)
+            gameBtnOnClick(btnTwo)
         }
 
         btnThree.setOnClickListener() {
-            gameBtnOnClick(btnThree, btnOne, btnTwo, btnThree, btnFour, btnFive)
+            gameBtnOnClick(btnThree)
         }
 
         btnFour.setOnClickListener() {
-            gameBtnOnClick(btnFour, btnOne, btnTwo, btnThree, btnFour, btnFive)
+            gameBtnOnClick(btnFour)
         }
 
         btnFive.setOnClickListener() {
-            gameBtnOnClick(btnFive, btnOne, btnTwo, btnThree, btnFour, btnFive)
+            gameBtnOnClick(btnFive)
         }
+
+
     }
 
-    private fun gameBtnOnClick(
-        btn: Button,
-        btnOne: Button,
-        btnTwo: Button,
-        btnThree: Button,
-        btnFour: Button,
-        btnFive: Button
-    ) {
+    fun popUpDisplay() {
+        if (AppPreferences(this@GameActivity).getSoundsMode()) {
+            if (mpEndGame.isPlaying) {
+                mpEndGame.pause()
+            }
+            mpEndGame.start()
+        }
+
+        val inflater: LayoutInflater =
+            getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+
+        // Inflate a custom view using layout inflater
+        val view = inflater.inflate(R.layout.time_over_popup, null)
+
+        // Initialize a new instance of popup window
+        val popupBlurView: FKBlurView = view.findViewById(R.id.popup_layout)
+        popupBlurView.setBlurBackground(this@GameActivity, popupBlurView)
+        popupWindow = PopupWindow(
+            view, // Custom view to show in popup window
+            LinearLayout.LayoutParams.MATCH_PARENT, // Width of popup window
+            LinearLayout.LayoutParams.MATCH_PARENT // Window height
+        )
+
+        TransitionManager.beginDelayedTransition(root_layout)
+        popupWindow.showAtLocation(
+            root_layout, // Location to display popup window
+            Gravity.CENTER, // Exact position of layout to display popup
+            0, // X offset
+            0 // Y offset
+        )
+        view.findViewById<LinearLayout>(R.id.popup_layout_bg).alpha = 0f
+        popupBlurView.alpha = 0f
+        val animDuration: Long = 1200
+        ObjectAnimator.ofFloat(
+            view.findViewById<LinearLayout>(R.id.popup_layout_bg),
+            "alpha",
+            1f
+        ).apply {
+            duration = animDuration
+            start()
+        }
+        ObjectAnimator.ofFloat(popupBlurView, "alpha", 1f).apply {
+            duration = animDuration
+            start()
+        }
+
+        val tvTotalScores: TextView = view.findViewById(R.id.tv_total_score)
+        val tvCongratsLabel: TextView = view.findViewById(R.id.tv_congrats_label)
+        val ivScoreIcon: ImageView = view.findViewById(R.id.iv_score_icon)
+
+        val congratsWords: Array<String> = arrayOf("VERY GOOD", "IMPRESSIVE", "BRILLIANT")
+        tvTotalScores?.text = "+${currentScore}"
+
+        if (AppPreferences(this@GameActivity).getHighScore() >= currentScore) {
+            tvCongratsLabel?.text = "${congratsWords.random()}!"
+        } else {
+            tvCongratsLabel?.text = "NEW RECORD!"
+            AppPreferences(this@GameActivity).saveHighScore(currentScore)
+        }
+
+        pulsingAnimImage(ivScoreIcon, 48, 60)
+        pulsingAnim(tvTotalScores, 24, 30)
+        pulsingAnim(tvCongratsLabel, 16, 20)
+        val btnMenu: Button = view.findViewById(R.id.popup_main_menu)
+        val btnAd: Button = view.findViewById(R.id.popup_watch_ad)
+        val btnStartGame: Button = view.findViewById(R.id.popup_start_game)
+
+        btnMenu.setOnClickListener() {
+            btnMenu.isSelected = true
+            AppPreferences(this).saveTotalScore(tvTotalScores.text.toString().toLong())
+            soundOnClick()
+            onBackPressed()
+        }
+
+        btnAd.setOnClickListener() {
+            btnAd.isSelected = true
+            if (btnAd.isEnabled) {
+                soundOnClick()
+            }
+            if (mRewardedVideoAd.isLoaded) {
+                mRewardedVideoAd.show()
+                btnAd.isSelected = false
+                loadRewardedVideoAd()
+            }
+        }
+
+        btnStartGame.setOnClickListener() {
+            btnStartGame.isSelected = true
+            AppPreferences(this).saveTotalScore(tvTotalScores.text.toString().toLong())
+            soundOnClick()
+            val intent = Intent(this@GameActivity, GameActivity::class.java)
+            startActivity(intent)
+        }
+
+        fun disableButton(btn: Button) {
+            btn.isEnabled = false
+        }
+
+        disableButton(btnOne)
+        disableButton(btnTwo)
+        disableButton(btnThree)
+        disableButton(btnFour)
+        disableButton(btnFive)
+    }
+
+    private fun loadRewardedVideoAd() {
+        mRewardedVideoAd.loadAd(
+            "ca-app-pub-6283297848022132/1049463453",
+            AdRequest.Builder().build()
+        )
+    }
+
+    private fun pulsingAnimImage(view: View, startSize: Int, endSize: Int) {
+        val animDuration: Long = 750
+
+        val animator = ValueAnimator.ofFloat(startSize.toFloat(), endSize.toFloat())
+        animator.duration = animDuration
+
+        animator.addUpdateListener { valueAnimator ->
+            val animatedValue = valueAnimator.animatedValue as Float
+            view.layoutParams.height = animatedValue.toInt()
+            view.layoutParams.width = animatedValue.toInt()
+        }
+
+        animator.repeatMode = REVERSE
+        animator.repeatCount = INFINITE
+        animator.start()
+    }
+
+    private fun pulsingAnim(view: TextView, startSize: Int, endSize: Int) {
+        val animDuration: Long = 750
+
+        val animator = ValueAnimator.ofFloat(startSize.toFloat(), endSize.toFloat())
+        animator.duration = animDuration
+
+        animator.addUpdateListener { valueAnimator ->
+            val animatedValue = valueAnimator.animatedValue as Float
+            view.textSize = animatedValue
+        }
+
+        animator.repeatMode = REVERSE
+        animator.repeatCount = INFINITE
+        animator.start()
+    }
+
+    private fun gameBtnOnClick(btn: Button) {
         btn.isSelected = !btn.isSelected
-        findViewById<TextView>(R.id.tv_number).text = "Number: ${randomNumber}"
+        soundOnClick()
+        findViewById<TextView>(R.id.tv_number).text = "$randomNumber"
         if (btn.isSelected) {
             count += btn.text.toString().toInt()
             if (count == randomNumber) {
-                currentScore += (80..120).random()
+                if (AppPreferences(this).getSoundsMode()) {
+                    if (mpScores.isPlaying) {
+                        mpScores.pause()
+                    }
+                    mpScores.start()
+                }
+                val tvGetScore: TextView = findViewById(R.id.tv_get_score)
+                val getScore = (80..120).random()
+                tvGetScore.alpha = 1f
+                tvGetScore.translationY = 20f
+                tvGetScore.text = getScore.toString()
+                val animDuration: Long = 1000
+                ObjectAnimator.ofFloat(tvGetScore, "translationY", -75f).apply {
+                    duration = animDuration
+                    start()
+                }
+                ObjectAnimator.ofFloat(tvGetScore, "alpha", 0f).apply {
+                    duration = animDuration
+                    start()
+                }
+                currentScore += getScore
                 randomNumber = getRandom()
-                gameStart(btnOne, btnTwo, btnThree, btnFour, btnFive)
+                gameStart()
             }
         } else {
             count -= btn.text.toString().toInt()
             if (count == randomNumber) {
-                currentScore += (80..120).random()
+                if (AppPreferences(this).getSoundsMode()) {
+                    if (mpScores.isPlaying) {
+                        mpScores.pause()
+                    }
+                    mpScores.start()
+                }
+                val tvGetScore: TextView = findViewById(R.id.tv_get_score)
+                val getScore = (80..120).random()
+                tvGetScore.alpha = 1f
+                tvGetScore.translationY = 20f
+                tvGetScore.text = getScore.toString()
+                val animDuration: Long = 1000
+                ObjectAnimator.ofFloat(tvGetScore, "translationY", -75f).apply {
+                    duration = animDuration
+                    start()
+                }
+                ObjectAnimator.ofFloat(tvGetScore, "alpha", 0f).apply {
+                    duration = animDuration
+                    start()
+                }
+                currentScore += getScore
                 randomNumber = getRandom()
-                gameStart(btnOne, btnTwo, btnThree, btnFour, btnFive)
+                gameStart()
             }
         }
     }
 
-    private fun gameStart(
-        btnOne: Button,
-        btnTwo: Button,
-        btnThree: Button,
-        btnFour: Button,
-        btnFive: Button
-    ) {
+    private fun gameStart() {
         count = 0
-        findViewById<TextView>(R.id.tv_number).text = "Number: ${randomNumber}"
-        findViewById<TextView>(R.id.tv_current_score).text = "Current score: ${currentScore}"
-        setNumbers(btnOne, btnTwo, btnThree, btnFour, btnFive, getNumbers(randomNumber))
+        findViewById<TextView>(R.id.tv_number).text = "$randomNumber"
+        findViewById<TextView>(R.id.tv_current_score).text = "$currentScore"
+        setNumbers(getNumbers(randomNumber))
         btnOne.isSelected = false
         btnTwo.isSelected = false
         btnThree.isSelected = false
@@ -172,26 +317,8 @@ class GameActivity : AppCompatActivity() {
         btnFive.isSelected = false
     }
 
-    open class NewCountDownTimer(private val tv: TextView) : CountDownTimer(60000, 1000) {
-        override fun onTick(p0: Long) {
-            if (p0 >= 10000) {
-                tv.text = "00:${p0 / 1000}"
-            } else {
-                tv.text = "00:0${p0 / 1000}"
-            }
-        }
-
-        override fun onFinish() {
-            tv.text = "Time over!"
-        }
-    }
-
     private fun setNumbers(
-        btnOne: Button,
-        btnTwo: Button,
-        btnThree: Button,
-        btnFour: Button,
-        btnFive: Button,
+
         arrayOfNumbers: List<Int>
     ) {
         btnOne.text = arrayOfNumbers[0].toString()
@@ -211,21 +338,37 @@ class GameActivity : AppCompatActivity() {
         val arr = IntArray(5) { 0 }
         for (i in 0 until countOfNumbers - 1) {
             if (sum - arr.sum() > 1) {
-                val randNumber = (1 until sum - arr.sum()).random()
-                arr[i] = randNumber
+                arr[i] = (1 until sum - arr.sum()).random() / 2
             }
         }
         arr[countOfNumbers - 1] = sum - arr.sum() + arr[countOfNumbers - 1]
         for (i in arr.indices) {
-            while (arr[i] == 0) {
-                val rand = (1 until sum).random()
-                arr[i] = rand
+            if (arr[i] == 0 || arr[i] == sum) {
+                arr[i] = (1 until sum).random()
             }
         }
-        return arr.toList().shuffled()
+
+        return arr.toMutableList().shuffled()
+    }
+
+    private fun soundOnClick() {
+        if (AppPreferences(this).getSoundsMode()) {
+            if (mp.isPlaying) {
+                mp.pause()
+            }
+            mp.start()
+        }
     }
 
     override fun onBackPressed() {
+        AppPreferences(this).soundsOff()
+        if (popupWindow.isShowing) {
+            AppPreferences(this).saveTotalScore(currentScore.toLong())
+        }
+        timer.cancel()
+        if (rewardGet) {
+            timerBonus.cancel()
+        }
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
@@ -241,5 +384,98 @@ class GameActivity : AppCompatActivity() {
                     or View.SYSTEM_UI_FLAG_FULLSCREEN
                     or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
         }
+    }
+
+    open class NewCountDownTimer(millisInFuture: Long) : CountDownTimer(millisInFuture, 1000) {
+        lateinit var tv: TextView
+        override fun onTick(p0: Long) {
+            if (p0 >= 10000) {
+                tv.text = "00:${p0 / 1000}"
+            } else {
+                tv.text = "00:0${p0 / 1000}"
+            }
+        }
+        override fun onFinish() {
+            tv.text = "Time over!"
+        }
+    }
+
+    private var timer = object : NewCountDownTimer(60000) {
+        override fun onFinish() {
+            popUpDisplay()
+            tv.text = "Time over!"
+        }
+    }
+
+    private var timerBonus = object : NewCountDownTimer(15000) {
+        override fun onFinish() {
+            popUpDisplay()
+            tv.text = "Time over!"
+        }
+    }
+
+    override fun onRewarded(p0: com.google.android.gms.ads.reward.RewardItem?) {
+        popupWindow.dismiss()
+        btnOne.isEnabled = true
+        btnTwo.isEnabled = true
+        btnThree.isEnabled = true
+        btnFour.isEnabled = true
+        btnFive.isEnabled = true
+        rewardGet = true
+    }
+
+    override fun onRewardedVideoAdLeftApplication() {
+
+    }
+
+    override fun onRewardedVideoAdClosed() {
+        if (rewardGet) {
+            timerBonus.start()
+        }
+    }
+
+    override fun onRewardedVideoAdFailedToLoad(errorCode: Int) {
+
+    }
+
+    override fun onRewardedVideoAdLoaded() {
+
+    }
+
+    override fun onRewardedVideoAdOpened() {
+
+    }
+
+    override fun onRewardedVideoStarted() {
+
+    }
+
+    override fun onRewardedVideoCompleted() {
+
+    }
+
+    override fun onPause() {
+        AppPreferences(this).soundsOff()
+        super.onPause()
+        mRewardedVideoAd.pause(this)
+    }
+
+    override fun onResume() {
+        AppPreferences(this).soundsOn()
+        super.onResume()
+        mRewardedVideoAd.resume(this)
+    }
+
+    override fun onDestroy() {
+        AppPreferences(this).soundsOff()
+        if (popupWindow.isShowing) {
+            AppPreferences(this).saveTotalScore(currentScore.toLong())
+        }
+        timer.cancel()
+        if (rewardGet) {
+            timerBonus.cancel()
+        }
+        super.onDestroy()
+        mRewardedVideoAd.destroy(this)
     }
 }

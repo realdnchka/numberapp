@@ -16,30 +16,81 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_weight="0.3"
+                android:gravity="start">
+
+                <Button
+                    android:id="@+id/btn_back"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/back_button" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_timer"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:gravity="center"
+                android:text="00:59"
+                android:textColor="@color/cream_white"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="0.3"
+                android:gravity="end|center_vertical">
+
+                <TextView
+                    android:id="@+id/tv_current_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/cream_white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/imageView"
+                    android:layout_marginStart="5dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:background="@drawable/score_icon" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
         <TextView
-            android:id="@+id/tv_current_score"
+            android:id="@+id/tv_get_score"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Current score: 0"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="40dp"
+            android:gravity="end"
+            android:text="234"
             android:textColor="@color/cream_white"
-            android:textSize="40sp" />
+            android:textSize="10sp" />
 
         <TextView
             android:id="@+id/tv_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Number: 0"
-            android:textColor="@color/cream_white"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/tv_timer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="00:59"
+            android:text="0"
             android:textColor="@color/cream_white"
             android:textSize="30sp" />
 
@@ -47,8 +98,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:paddingBottom="294px"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingBottom="294px">
 
             <Button
                 android:id="@+id/btn_one"

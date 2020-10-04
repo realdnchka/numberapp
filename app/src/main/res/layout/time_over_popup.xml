@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.github.furkankaplan.fkblurview.FKBlurView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.github.furkankaplan.fkblurview.FKBlurView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/popup_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:id="@+id/popup_layout">
+    android:layout_gravity="center">
 
     <LinearLayout
+        android:id="@+id/popup_layout_bg"
         android:layout_width="240dp"
         android:layout_height="160dp"
         android:background="@drawable/popup_bg"
@@ -21,8 +21,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/time_over"
             android:fontFamily="@font/roboto_light"
+            android:text="@string/time_over"
             android:textColor="@color/cream_white"
             android:textSize="12sp" />
 
@@ -40,34 +40,59 @@
             android:background="@drawable/menu_button"
             android:text="@string/watch_ad" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_light"
+            android:text="Watch Ad and get 15 sec"
+            android:textColor="@color/cream_white"
+            android:textSize="10sp" />
+
         <Button
             android:id="@+id/popup_main_menu"
             style="@style/MenuButton"
-            android:layout_marginTop="10dp"
             android:background="@drawable/menu_button"
             android:text="@string/main_menu" />
     </LinearLayout>
+
     <LinearLayout
+        android:id="@+id/ll_scores"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:rotation="-20"
-        android:orientation="vertical"
-        android:layout_marginTop="160dp"
         android:layout_marginLeft="190dp"
+        android:layout_marginTop="160dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:rotation="-20"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-        <TextView
-            android:id="@+id/tv_total_score"
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto"
-            android:textSize="24sp"
-            android:gravity="center"
-            android:text=""
-            android:textColor="@color/cream_white"/>
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tv_total_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:gravity="center"
+                android:text="+1800"
+                android:textColor="@color/cream_white"
+                android:textSize="24sp" />
+
+            <ImageView
+                android:layout_marginStart="5dp"
+                android:id="@+id/iv_score_icon"
+                android:src="@drawable/score_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_congrats_label"
