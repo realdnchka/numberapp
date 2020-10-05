@@ -29,7 +29,7 @@ import kotlin.properties.Delegates
 
 class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
     private lateinit var mp: MediaPlayer
-    private var soundsOn: Boolean = AppPreferences(this).getSoundsMode()
+    private var soundsOn: Boolean = true
     private lateinit var mpScores: MediaPlayer
     private lateinit var mpEndGame: MediaPlayer
     private lateinit var btnOne: Button
@@ -65,6 +65,7 @@ class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
         tvTimer = findViewById(R.id.tv_timer)
         btnBack = findViewById(R.id.btn_back)
 
+        soundsOn = AppPreferences(this).getSoundsMode()
         btnBack.setOnClickListener() {
             btnBack.isSelected = true
             soundOnClick()
