@@ -29,6 +29,7 @@ import kotlin.properties.Delegates
 
 class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
     private lateinit var mp: MediaPlayer
+    private var soundsOn: Boolean = AppPreferences(this).getSoundsMode()
     private lateinit var mpScores: MediaPlayer
     private lateinit var mpEndGame: MediaPlayer
     private lateinit var btnOne: Button
@@ -67,7 +68,12 @@ class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
         btnBack.setOnClickListener() {
             btnBack.isSelected = true
             soundOnClick()
-            onBackPressed()
+            timer.cancel()
+            if (rewardGet) {
+                timerBonus.cancel()
+            }
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
 
         gameStart()
@@ -95,12 +101,10 @@ class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
         btnFive.setOnClickListener() {
             gameBtnOnClick(btnFive)
         }
-
-
     }
 
-    fun popUpDisplay() {
-        if (AppPreferences(this@GameActivity).getSoundsMode()) {
+    private fun popUpDisplay() {
+        if (soundsOn) {
             if (mpEndGame.isPlaying) {
                 mpEndGame.pause()
             }
@@ -192,16 +196,6 @@ class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
             val intent = Intent(this@GameActivity, GameActivity::class.java)
             startActivity(intent)
         }
-
-        fun disableButton(btn: Button) {
-            btn.isEnabled = false
-        }
-
-        disableButton(btnOne)
-        disableButton(btnTwo)
-        disableButton(btnThree)
-        disableButton(btnFour)
-        disableButton(btnFive)
     }
 
     private fun loadRewardedVideoAd() {
@@ -251,7 +245,7 @@ class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
         if (btn.isSelected) {
             count += btn.text.toString().toInt()
             if (count == randomNumber) {
-                if (AppPreferences(this).getSoundsMode()) {
+                if (soundsOn) {
                     if (mpScores.isPlaying) {
                         mpScores.pause()
                     }
@@ -278,7 +272,7 @@ class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
         } else {
             count -= btn.text.toString().toInt()
             if (count == randomNumber) {
-                if (AppPreferences(this).getSoundsMode()) {
+                if (soundsOn) {
                     if (mpScores.isPlaying) {
                         mpScores.pause()
                     }
@@ -352,7 +346,7 @@ class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
     }
 
     private fun soundOnClick() {
-        if (AppPreferences(this).getSoundsMode()) {
+        if (soundsOn) {
             if (mp.isPlaying) {
                 mp.pause()
             }
@@ -361,7 +355,7 @@ class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
     }
 
     override fun onBackPressed() {
-        AppPreferences(this).soundsOff()
+        soundsOn = false
         if (popupWindow.isShowing) {
             AppPreferences(this).saveTotalScore(currentScore.toLong())
         }
@@ -395,6 +389,7 @@ class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
                 tv.text = "00:0${p0 / 1000}"
             }
         }
+
         override fun onFinish() {
             tv.text = "Time over!"
         }
@@ -455,19 +450,19 @@ class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
     }
 
     override fun onPause() {
-        AppPreferences(this).soundsOff()
+        soundsOn = false
         super.onPause()
         mRewardedVideoAd.pause(this)
     }
 
     override fun onResume() {
-        AppPreferences(this).soundsOn()
+        soundsOn = AppPreferences(this).getSoundsMode()
         super.onResume()
         mRewardedVideoAd.resume(this)
     }
 
     override fun onDestroy() {
-        AppPreferences(this).soundsOff()
+        soundsOn = false
         if (popupWindow.isShowing) {
             AppPreferences(this).saveTotalScore(currentScore.toLong())
         }

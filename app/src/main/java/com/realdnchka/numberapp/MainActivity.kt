@@ -72,6 +72,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun changeState(view: View) {
         view.isSelected = true
+        view.isEnabled = false
     }
 
     override fun onBackPressed() {
