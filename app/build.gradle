@@ -44,5 +44,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-perf-ktx:19.0.9'
     implementation 'com.google.firebase:firebase-crashlytics-ktx:17.2.2'
     implementation 'com.google.firebase:firebase-auth:19.4.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx:21.7.0'
     implementation 'com.google.android.gms:play-services-auth:18.1.0'
 }

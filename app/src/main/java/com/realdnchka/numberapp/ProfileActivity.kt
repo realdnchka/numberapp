@@ -5,9 +5,11 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.realdnchka.numberapp.storage.AppPreferences
+import com.realdnchka.numberapp.storage.Firestore
 
 class ProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,6 +26,16 @@ class ProfileActivity : AppCompatActivity() {
         }
         tvTotalScore.text = AppPreferences(this).getTotalScore().toString()
         tvHighScore.text = AppPreferences(this).getHighScore().toString()
+        val etUsername: EditText = findViewById(R.id.et_username)
+        val saveBtn: Button = findViewById(R.id.save_button)
+        saveBtn.setOnClickListener() {
+            AppPreferences(this).addUser(etUsername.text.toString(), this)
+        }
+        etUsername.setText(AppPreferences(this).getUser())
+        val userId: TextView = findViewById(R.id.user_id)
+        userId.text = AppPreferences(this).getUserId()
+        Firestore.highScore = AppPreferences(this).getHighScore()
+        Firestore.totalScore = AppPreferences(this).getTotalScore()
     }
 
     override fun onBackPressed() {
