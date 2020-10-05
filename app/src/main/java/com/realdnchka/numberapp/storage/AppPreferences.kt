@@ -12,7 +12,7 @@ class AppPreferences (context: Context) {
         Firestore.addUser(username, context)
     }
 
-    fun saveUserId(docId: String) {
+    fun saveUserId() {
         data.edit().putString("USER_ID", Firestore.docId).apply()
     }
 
