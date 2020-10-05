@@ -2,14 +2,13 @@ package com.realdnchka.numberapp
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
-import android.animation.ValueAnimator.REVERSE
 import android.animation.ValueAnimator.INFINITE
+import android.animation.ValueAnimator.REVERSE
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.provider.MediaStore
 import android.transition.TransitionManager
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -21,10 +20,8 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.reward.RewardedVideoAd
 import com.google.android.gms.ads.reward.RewardedVideoAdListener
-import com.google.android.gms.ads.rewarded.RewardItem
 import com.realdnchka.numberapp.storage.AppPreferences
 import kotlinx.android.synthetic.main.activity_game.*
-import kotlin.properties.Delegates
 
 
 class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
@@ -398,15 +395,25 @@ class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
 
     private var timer = object : NewCountDownTimer(60000) {
         override fun onFinish() {
-            popUpDisplay()
+            btnOne.isEnabled = false
+            btnTwo.isEnabled = false
+            btnThree.isEnabled = false
+            btnFour.isEnabled = false
+            btnFive.isEnabled = false
             tv.text = "Time over!"
+            popUpDisplay()
         }
     }
 
     private var timerBonus = object : NewCountDownTimer(15000) {
         override fun onFinish() {
-            popUpDisplay()
+            btnOne.isEnabled = false
+            btnTwo.isEnabled = false
+            btnThree.isEnabled = false
+            btnFour.isEnabled = false
+            btnFive.isEnabled = false
             tv.text = "Time over!"
+            popUpDisplay()
         }
     }
 
