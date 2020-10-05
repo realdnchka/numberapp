@@ -80,7 +80,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Total score:"
+                    android:text="Total score: "
                     android:textColor="@color/cream_white" />
 
                 <TextView
