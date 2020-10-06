@@ -4,23 +4,20 @@ import android.content.Context
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-object Firestore {
+class Firestore(private val context: Context) {
     private val db = Firebase.firestore
-    var docId: String = "Please, try again"
-    var totalScore: Long = 0
-    var highScore: Int = 0
-
-    fun addUser(username: String, context: Context) {
+    private val docId = AppPreferences(context).getUserId()
+    fun addUser(username: String) {
         val user = hashMapOf(
             "user_name" to username,
-            "total_score" to totalScore,
-            "high_score" to highScore
+            "total_score" to 0,
+            "high_score" to 0
         )
         db.collection("users").add(user).addOnSuccessListener { documentReference ->
-            docId = documentReference.id
-            AppPreferences(context).saveUserId(docId)
+            AppPreferences(context).saveUserId(documentReference.id)
+            AppPreferences(context).addUser(username, context)
         }.addOnFailureListener {
-            docId = "Please, try again"
+            AppPreferences(context).addUser(username, context)
         }
     }
 
@@ -48,14 +45,23 @@ object Firestore {
     }
 
     fun getUserData(): List<Any> {
-        val user = db.collection("users").document(docId).get()
-        val totalScore: Long = user.result.get("total_score").toString().toLong()
-        val highScore: Int = user.result.get("high_score").toString().toInt()
-        val username: String = user.result.get("user_name").toString()
-        return listOf(
-            totalScore,
-            highScore,
-            username
-        )
+        var list = List<Any>(3) { 111 }
+        db.collection("users").document(docId).get().addOnSuccessListener { result ->
+            val totalScore: Long = result.get("total_score").toString().toLong()
+            val highScore: Int = result.get("high_score").toString().toInt()
+            val username: String = result.get("user_name").toString()
+            list = listOf(
+                totalScore,
+                highScore,
+                username
+            )
+        }.addOnFailureListener {
+            list = listOf(
+                AppPreferences(context).getTotalScore(),
+                AppPreferences(context).getHighScore(),
+                AppPreferences(context).getUser()
+            )
+        }
+        return list
     }
 }

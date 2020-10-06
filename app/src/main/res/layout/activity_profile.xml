@@ -107,12 +107,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="text"
+                android:textColorHint="@color/cream_white"
+                android:textColor="@color/cream_white"
+                android:outlineSpotShadowColor="@color/cream_white"
+                android:outlineAmbientShadowColor="@color/cream_white"
+                android:shadowColor="@color/cream_white"
+                android:textColorHighlight="@color/cream_white"
+                android:textColorLink="@color/cream_white"
                 android:text=""/>
             <Button
                 android:id="@+id/save_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="save username"/>
+                android:text="UPDATE"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

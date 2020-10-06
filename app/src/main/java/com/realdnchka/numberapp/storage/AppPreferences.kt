@@ -9,11 +9,10 @@ class AppPreferences (context: Context) {
 
     fun addUser(username: String, context: Context) {
         data.edit().putString("USER_NAME", username).apply()
-        Firestore.addUser(username, context)
     }
 
-    fun saveUserId() {
-        data.edit().putString("USER_ID", Firestore.docId).apply()
+    fun saveUserId(docId: String) {
+        data.edit().putString("USER_ID", docId).apply()
     }
 
     fun getUserId(): String {
@@ -38,7 +37,7 @@ class AppPreferences (context: Context) {
 
     fun saveTotalScore(totalScore: Long) {
         data.edit().putLong("TOTAL_SCORE", data.getLong("TOTAL_SCORE", 0) + totalScore).apply()
-        Firestore.updateTotalScore(getUser(), totalScore)
+        //Firestore(this).updateTotalScore(getUser(), totalScore)
     }
 
     fun getTotalScore(): Long {

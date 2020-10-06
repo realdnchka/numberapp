@@ -29,13 +29,9 @@ class ProfileActivity : AppCompatActivity() {
         val etUsername: EditText = findViewById(R.id.et_username)
         val saveBtn: Button = findViewById(R.id.save_button)
         saveBtn.setOnClickListener() {
-            AppPreferences(this).addUser(etUsername.text.toString(), this)
+            Firestore(this).addUser(etUsername.text.toString())
         }
-        etUsername.setText(AppPreferences(this).getUser())
-        val userId: TextView = findViewById(R.id.user_id)
-        userId.text = AppPreferences(this).getUserId()
-        Firestore.highScore = AppPreferences(this).getHighScore()
-        Firestore.totalScore = AppPreferences(this).getTotalScore()
+        etUsername.setText(Firestore(this).getUserData()[2].toString())
     }
 
     override fun onBackPressed() {
