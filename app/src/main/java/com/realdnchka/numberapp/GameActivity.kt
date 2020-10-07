@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.animation.ValueAnimator.INFINITE
 import android.animation.ValueAnimator.REVERSE
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
@@ -14,17 +15,30 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
+import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import com.github.furkankaplan.fkblurview.FKBlurView
+import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.reward.RewardedVideoAd
-import com.google.android.gms.ads.reward.RewardedVideoAdListener
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.rewarded.RewardItem
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdCallback
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.realdnchka.numberapp.storage.AppPreferences
 import kotlinx.android.synthetic.main.activity_game.*
 
 
-class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
+class GameActivity : AppCompatActivity() {
+    private val adLoadCallback = object: RewardedAdLoadCallback() {
+        override fun onRewardedAdLoaded() {
+            Toast.makeText(this@GameActivity, "Ad Loaded", Toast.LENGTH_LONG).show()
+        }
+        override fun onRewardedAdFailedToLoad(adError: LoadAdError) {
+            Toast.makeText(this@GameActivity, "Ad no loaded", Toast.LENGTH_LONG).show()
+        }
+    }
+
     private lateinit var mp: MediaPlayer
     private var soundsOn: Boolean = true
     private lateinit var mpScores: MediaPlayer
@@ -36,7 +50,7 @@ class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
     private lateinit var btnFive: Button
     private lateinit var tvTimer: TextView
     private lateinit var btnBack: Button
-    private lateinit var mRewardedVideoAd: RewardedVideoAd
+    private lateinit var rewardedAd: RewardedAd
     private lateinit var popupWindow: PopupWindow
 
     private var rewardGet: Boolean = false
@@ -48,9 +62,10 @@ class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
         setContentView(R.layout.activity_game)
         supportActionBar?.hide()
 
-        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this)
-        mRewardedVideoAd.rewardedVideoAdListener = this
-        loadRewardedVideoAd()
+        rewardedAd = RewardedAd(this,
+            "ca-app-pub-6283297848022132/2603369653")
+
+        rewardedAd.loadAd(AdRequest.Builder().build(), adLoadCallback)
         mp = MediaPlayer.create(this, R.raw.button_select)
         mpScores = MediaPlayer.create(this, R.raw.get_scores)
         mpEndGame = MediaPlayer.create(this, R.raw.end_game)
@@ -167,7 +182,8 @@ class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
         val btnMenu: Button = view.findViewById(R.id.popup_main_menu)
         val btnAd: Button = view.findViewById(R.id.popup_watch_ad)
         val btnStartGame: Button = view.findViewById(R.id.popup_start_game)
-
+        btnAd.isSelected = !rewardedAd.isLoaded
+        btnAd.isEnabled = rewardedAd.isLoaded
         btnMenu.setOnClickListener() {
             btnMenu.isSelected = true
             AppPreferences(this).saveTotalScore(tvTotalScores.text.toString().toLong())
@@ -176,17 +192,43 @@ class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
         }
 
         btnAd.setOnClickListener() {
-            btnAd.isSelected = true
-            if (btnAd.isEnabled) {
-                soundOnClick()
-            }
-            if (mRewardedVideoAd.isLoaded) {
-                mRewardedVideoAd.show()
-                btnAd.isSelected = false
-                loadRewardedVideoAd()
+            soundOnClick()
+            if (rewardedAd.isLoaded) {
+                btnAd.isSelected = true
+                val activityContext: Activity = this
+                val adCallback = object: RewardedAdCallback() {
+                    override fun onRewardedAdClosed() {
+                        if (rewardGet) {
+                            timerBonus.start()
+                            rewardGet = false
+                        } else {
+                            btnAd.isSelected = false
+                            btnAd.isEnabled = true
+                        }
+                    }
+                    override fun onUserEarnedReward(@NonNull reward: RewardItem) {
+                        popupWindow.dismiss()
+                        btnOne.isEnabled = true
+                        btnTwo.isEnabled = true
+                        btnThree.isEnabled = true
+                        btnFour.isEnabled = true
+                        btnFive.isEnabled = true
+                        rewardGet = true
+                    }
+                    override fun onRewardedAdFailedToShow(adError:
+                                                          AdError) {
+                        Toast.makeText(this@GameActivity, "Error. Please, try again later", Toast.LENGTH_LONG).show()
+                    }
+
+                    override fun onRewardedAdOpened() {
+                        rewardedAd = RewardedAd(this@GameActivity,
+                            "ca-app-pub-6283297848022132/2603369653")
+                        rewardedAd.loadAd(AdRequest.Builder().build(), adLoadCallback)
+                    }
+                }
+                rewardedAd.show(activityContext, adCallback)
             } else {
-                btnAd.isSelected = false
-                Toast.makeText(this, "Please, connect to the Internet", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@GameActivity, "Error. Please, try again later", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -197,13 +239,6 @@ class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
             val intent = Intent(this@GameActivity, GameActivity::class.java)
             startActivity(intent)
         }
-    }
-
-    private fun loadRewardedVideoAd() {
-        mRewardedVideoAd.loadAd(
-            "ca-app-pub-6283297848022132/2603369653",
-            AdRequest.Builder().build()
-        )
     }
 
     private fun pulsingAnimImage(view: View, startSize: Int, endSize: Int) {
@@ -420,56 +455,14 @@ class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
         }
     }
 
-    override fun onRewarded(p0: com.google.android.gms.ads.reward.RewardItem?) {
-        popupWindow.dismiss()
-        btnOne.isEnabled = true
-        btnTwo.isEnabled = true
-        btnThree.isEnabled = true
-        btnFour.isEnabled = true
-        btnFive.isEnabled = true
-        rewardGet = true
-    }
-
-    override fun onRewardedVideoAdLeftApplication() {
-        Toast.makeText(this, "Video hz wo eto", Toast.LENGTH_SHORT)
-    }
-
-    override fun onRewardedVideoAdClosed() {
-        if (rewardGet) {
-            timerBonus.start()
-        }
-    }
-
-    override fun onRewardedVideoAdFailedToLoad(errorCode: Int) {
-        Toast.makeText(this, "Video ne zagruzilos", Toast.LENGTH_SHORT)
-    }
-
-    override fun onRewardedVideoAdLoaded() {
-        Toast.makeText(this, "Video zagruzilos", Toast.LENGTH_SHORT)
-    }
-
-    override fun onRewardedVideoAdOpened() {
-
-    }
-
-    override fun onRewardedVideoStarted() {
-
-    }
-
-    override fun onRewardedVideoCompleted() {
-
-    }
-
     override fun onPause() {
         soundsOn = false
         super.onPause()
-        mRewardedVideoAd.pause(this)
     }
 
     override fun onResume() {
         soundsOn = AppPreferences(this).getSoundsMode()
         super.onResume()
-        mRewardedVideoAd.resume(this)
     }
 
     override fun onDestroy() {
@@ -482,6 +475,5 @@ class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
             timerBonus.cancel()
         }
         super.onDestroy()
-        mRewardedVideoAd.destroy(this)
     }
 }
