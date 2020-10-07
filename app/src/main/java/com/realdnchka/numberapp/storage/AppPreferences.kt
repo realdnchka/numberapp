@@ -6,7 +6,6 @@ import android.content.SharedPreferences
 class AppPreferences (context: Context) {
     private var data: SharedPreferences = context.getSharedPreferences("APP_PREFERENCES", Context.MODE_PRIVATE)
 
-
     fun addUser(username: String, context: Context) {
         data.edit().putString("USER_NAME", username).apply()
     }
@@ -37,7 +36,6 @@ class AppPreferences (context: Context) {
 
     fun saveTotalScore(totalScore: Long) {
         data.edit().putLong("TOTAL_SCORE", data.getLong("TOTAL_SCORE", 0) + totalScore).apply()
-        //Firestore(this).updateTotalScore(getUser(), totalScore)
     }
 
     fun getTotalScore(): Long {
