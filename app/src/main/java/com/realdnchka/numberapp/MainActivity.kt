@@ -12,7 +12,7 @@ import com.realdnchka.numberapp.storage.AppPreferences
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        MobileAds.initialize(this, "ca-app-pub-6283297848022132~9827113932")
+        MobileAds.initialize(this) {}
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()

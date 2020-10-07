@@ -184,6 +184,9 @@ class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
                 mRewardedVideoAd.show()
                 btnAd.isSelected = false
                 loadRewardedVideoAd()
+            } else {
+                btnAd.isSelected = false
+                Toast.makeText(this, "Please, connect to the Internet", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -198,7 +201,7 @@ class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
 
     private fun loadRewardedVideoAd() {
         mRewardedVideoAd.loadAd(
-            "ca-app-pub-6283297848022132/1049463453",
+            "ca-app-pub-6283297848022132/2603369653",
             AdRequest.Builder().build()
         )
     }
@@ -428,7 +431,7 @@ class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
     }
 
     override fun onRewardedVideoAdLeftApplication() {
-
+        Toast.makeText(this, "Video hz wo eto", Toast.LENGTH_SHORT)
     }
 
     override fun onRewardedVideoAdClosed() {
@@ -438,11 +441,11 @@ class GameActivity : AppCompatActivity(), RewardedVideoAdListener {
     }
 
     override fun onRewardedVideoAdFailedToLoad(errorCode: Int) {
-
+        Toast.makeText(this, "Video ne zagruzilos", Toast.LENGTH_SHORT)
     }
 
     override fun onRewardedVideoAdLoaded() {
-
+        Toast.makeText(this, "Video zagruzilos", Toast.LENGTH_SHORT)
     }
 
     override fun onRewardedVideoAdOpened() {
