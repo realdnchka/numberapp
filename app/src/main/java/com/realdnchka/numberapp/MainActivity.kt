@@ -4,11 +4,10 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.MobileAds
 import com.realdnchka.numberapp.storage.AppPreferences
-import com.google.android.gms.ads.MobileAds;
 
 
 class MainActivity : AppCompatActivity() {
@@ -21,9 +20,9 @@ class MainActivity : AppCompatActivity() {
         val btnExit: Button = findViewById(R.id.btn_exit)
         val btnProfile: Button = findViewById(R.id.btn_profile)
         val btnSettings: Button = findViewById(R.id.btn_settings)
-        val btnLeaderboard: Button = findViewById(R.id.btn_leaderboard)
-        btnLeaderboard.isEnabled = false
-        btnLeaderboard.isSelected = true
+//        val btnLeaderboard: Button = findViewById(R.id.btn_leaderboard)
+//        btnLeaderboard.isEnabled = false
+//        btnLeaderboard.isSelected = true
         btnStartGame.setOnClickListener(this::onBtnNewGameClick)
         btnExit.setOnClickListener(this::exitGame)
         btnProfile.setOnClickListener(this::onBtnProfileCLick)
