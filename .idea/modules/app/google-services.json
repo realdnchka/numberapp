@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "998067151071",
+    "firebase_url": "https://numberapp-c76f4.firebaseio.com",
+    "project_id": "numberapp-c76f4",
+    "storage_bucket": "numberapp-c76f4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:998067151071:android:2e9cf0d4f1ca8c220c496a",
+        "android_client_info": {
+          "package_name": "com.realdnchka.numberapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "998067151071-8eph1scbh4jmnb1dihk5hfu6hs6lmpid.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.realdnchka.numberapp",
+            "certificate_hash": "159b5f6b185c6c4583d821cbc5404d0a11c5881d"
+          }
+        },
+        {
+          "client_id": "998067151071-9fks3dutoie7h866eplv9bhe58o32aha.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnWvuWO3np6vMB5L05trVD29RxvFA-xyQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "998067151071-9fks3dutoie7h866eplv9bhe58o32aha.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-6283297848022132~9827113932"
+    }
+  ],
+  "configuration_version": "1"
+}
