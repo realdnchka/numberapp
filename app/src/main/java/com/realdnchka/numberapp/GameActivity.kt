@@ -35,7 +35,7 @@ class GameActivity : AppCompatActivity() {
             Toast.makeText(this@GameActivity, "Ad Loaded", Toast.LENGTH_LONG).show()
         }
         override fun onRewardedAdFailedToLoad(adError: LoadAdError) {
-            Toast.makeText(this@GameActivity, "Ad no loaded", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@GameActivity, "Ad no loaded ${adError}", Toast.LENGTH_LONG).show()
         }
     }
 
