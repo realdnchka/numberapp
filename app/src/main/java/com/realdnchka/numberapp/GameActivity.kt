@@ -166,7 +166,7 @@ class GameActivity : AppCompatActivity() {
         val tvCongratsLabel: TextView = view.findViewById(R.id.tv_congrats_label)
         val ivScoreIcon: ImageView = view.findViewById(R.id.iv_score_icon)
 
-        val congratsWords: Array<String> = arrayOf("VERY GOOD", "IMPRESSIVE", "BRILLIANT")
+        val congratsWords: Array<String> = arrayOf("VERY GOOD", "IMPRESSIVE", "BRILLIANT", "AWESOME")
         tvTotalScores?.text = "+${currentScore}"
 
         if (AppPreferences(this@GameActivity).getHighScore() >= currentScore) {
@@ -217,7 +217,7 @@ class GameActivity : AppCompatActivity() {
                     }
                     override fun onRewardedAdFailedToShow(adError:
                                                           AdError) {
-                        Toast.makeText(this@GameActivity, "Error. Please, try again later", Toast.LENGTH_LONG).show()
+//                        Toast.makeText(this@GameActivity, "Error. Please, try again later", Toast.LENGTH_LONG).show()
                     }
 
                     override fun onRewardedAdOpened() {
@@ -228,7 +228,7 @@ class GameActivity : AppCompatActivity() {
                 }
                 rewardedAd.show(activityContext, adCallback)
             } else {
-                Toast.makeText(this@GameActivity, "Error. Please, try again later", Toast.LENGTH_LONG).show()
+//                Toast.makeText(this@GameActivity, "Error. Please, try again later", Toast.LENGTH_LONG).show()
             }
         }
 
