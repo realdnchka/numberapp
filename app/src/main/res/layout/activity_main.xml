@@ -4,8 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/img_bg"
     tools:context=".MainActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/bg_img"
+        android:scaleType="centerCrop" />
 
     <LinearLayout
         android:layout_width="409dp"
@@ -23,26 +28,27 @@
             android:id="@+id/btn_start_game"
             style="@style/MenuButton"
             android:background="@drawable/menu_button"
-            android:text="@string/start_game"
-            />
-<!--        <Button-->
-<!--            android:id="@+id/btn_leaderboard"-->
-<!--            style="@style/MenuButton"-->
-<!--            android:background="@drawable/menu_button"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:text="@string/leaderboard"/>-->
+            android:text="@string/start_game" />
+        <!--        <Button-->
+        <!--            android:id="@+id/btn_leaderboard"-->
+        <!--            style="@style/MenuButton"-->
+        <!--            android:background="@drawable/menu_button"-->
+        <!--            android:layout_marginTop="10dp"-->
+        <!--            android:text="@string/leaderboard"/>-->
         <Button
             android:id="@+id/btn_profile"
             style="@style/MenuButton"
             android:background="@drawable/menu_button"
             android:layout_marginTop="10dp"
             android:text="@string/profile" />
+
         <Button
             android:id="@+id/btn_settings"
             style="@style/MenuButton"
             android:background="@drawable/menu_button"
             android:layout_marginTop="10dp"
             android:text="@string/settings" />
+
         <Button
             android:id="@+id/btn_exit"
             style="@style/MenuButton"

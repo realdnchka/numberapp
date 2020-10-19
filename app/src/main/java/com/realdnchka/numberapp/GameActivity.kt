@@ -30,12 +30,13 @@ import kotlinx.android.synthetic.main.activity_game.*
 
 
 class GameActivity : AppCompatActivity() {
-    private val adLoadCallback = object: RewardedAdLoadCallback() {
+    private val adLoadCallback = object : RewardedAdLoadCallback() {
         override fun onRewardedAdLoaded() {
-            Toast.makeText(this@GameActivity, "Ad Loaded", Toast.LENGTH_LONG).show()
+            //Toast.makeText(this@GameActivity, "Ad Loaded", Toast.LENGTH_LONG).show()
         }
+
         override fun onRewardedAdFailedToLoad(adError: LoadAdError) {
-            Toast.makeText(this@GameActivity, "Ad no loaded ${adError}", Toast.LENGTH_LONG).show()
+            //Toast.makeText(this@GameActivity, "Ad no loaded ${adError}", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -62,8 +63,10 @@ class GameActivity : AppCompatActivity() {
         setContentView(R.layout.activity_game)
         supportActionBar?.hide()
 
-        rewardedAd = RewardedAd(this,
-            "ca-app-pub-6283297848022132/2603369653")
+        rewardedAd = RewardedAd(
+            this,
+            "ca-app-pub-6283297848022132/2603369653"
+        )
 
         rewardedAd.loadAd(AdRequest.Builder().build(), adLoadCallback)
         mp = MediaPlayer.create(this, R.raw.button_select)
@@ -166,7 +169,8 @@ class GameActivity : AppCompatActivity() {
         val tvCongratsLabel: TextView = view.findViewById(R.id.tv_congrats_label)
         val ivScoreIcon: ImageView = view.findViewById(R.id.iv_score_icon)
 
-        val congratsWords: Array<String> = arrayOf("VERY GOOD", "IMPRESSIVE", "BRILLIANT", "AWESOME")
+        val congratsWords: Array<String> =
+            arrayOf("VERY GOOD", "IMPRESSIVE", "BRILLIANT", "AWESOME")
         tvTotalScores?.text = "+${currentScore}"
 
         if (AppPreferences(this@GameActivity).getHighScore() >= currentScore) {
@@ -196,7 +200,7 @@ class GameActivity : AppCompatActivity() {
             if (rewardedAd.isLoaded) {
                 btnAd.isSelected = true
                 val activityContext: Activity = this
-                val adCallback = object: RewardedAdCallback() {
+                val adCallback = object : RewardedAdCallback() {
                     override fun onRewardedAdClosed() {
                         if (rewardGet) {
                             timerBonus.start()
@@ -206,6 +210,7 @@ class GameActivity : AppCompatActivity() {
                             btnAd.isEnabled = true
                         }
                     }
+
                     override fun onUserEarnedReward(@NonNull reward: RewardItem) {
                         popupWindow.dismiss()
                         btnOne.isEnabled = true
@@ -215,14 +220,19 @@ class GameActivity : AppCompatActivity() {
                         btnFive.isEnabled = true
                         rewardGet = true
                     }
-                    override fun onRewardedAdFailedToShow(adError:
-                                                          AdError) {
+
+                    override fun onRewardedAdFailedToShow(
+                        adError:
+                        AdError
+                    ) {
 //                        Toast.makeText(this@GameActivity, "Error. Please, try again later", Toast.LENGTH_LONG).show()
                     }
 
                     override fun onRewardedAdOpened() {
-                        rewardedAd = RewardedAd(this@GameActivity,
-                            "ca-app-pub-6283297848022132/2603369653")
+                        rewardedAd = RewardedAd(
+                            this@GameActivity,
+                            "ca-app-pub-6283297848022132/2603369653"
+                        )
                         rewardedAd.loadAd(AdRequest.Builder().build(), adLoadCallback)
                     }
                 }

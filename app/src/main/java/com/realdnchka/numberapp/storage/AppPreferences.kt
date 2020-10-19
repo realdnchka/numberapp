@@ -3,8 +3,9 @@ package com.realdnchka.numberapp.storage
 import android.content.Context
 import android.content.SharedPreferences
 
-class AppPreferences (context: Context) {
-    private var data: SharedPreferences = context.getSharedPreferences("APP_PREFERENCES", Context.MODE_PRIVATE)
+class AppPreferences(context: Context) {
+    private var data: SharedPreferences =
+        context.getSharedPreferences("APP_PREFERENCES", Context.MODE_PRIVATE)
 
     fun addUser(username: String, context: Context) {
         data.edit().putString("USER_NAME", username).apply()

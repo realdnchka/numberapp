@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-        <item>
-            <shape android:shape="rectangle">
-                <corners android:radius="10dp"/>
-                <size android:width="52dp"
-                    android:height="52dp"/>
-                <solid android:color="@color/btn_pressed"/>
-            </shape>
-        </item>
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="10dp" />
+            <size
+                android:width="52dp"
+                android:height="52dp" />
+            <solid android:color="@color/btn_pressed" />
+        </shape>
+    </item>
 </layer-list>
